@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CosmosVR - O Universo nas Suas Mãos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --space-black: #0B0B1E;
+            --neon-blue: #00F2FE;
+            --cosmic-purple: #9B51E0;
+            --dark-purple: #6A1B9A;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-white: #FFFFFF;
+            --text-gray: #B8B8D4;
+            --glow: 0 0 20px rgba(155, 81, 224, 0.5);
+            --glow-blue: 0 0 20px rgba(0, 242, 254, 0.5);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--space-black);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(11, 11, 30, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-blue), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--cosmic-purple), var(--dark-purple));
+            padding: 0.7rem 1.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--glow);
+        }
+
+        .nav-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(155, 81, 224, 0.7);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 4rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 140%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(155, 81, 224, 0.15) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 1000px;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(155, 81, 224, 0.2));
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 242, 254, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.5); }
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--text-white), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: var(--text-gray);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .hero-cta-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-cta {
+            background: linear-gradient(135deg, var(--neon-blue), #00C3FF);
+            color: #0B0B1E;
+            padding: 1rem 2.5rem;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: var(--glow-blue);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.6);
+        }
+
+        .hero-cta-secondary {
+            background: transparent;
+            color: var(--neon-blue);
+            padding: 1rem 2.5rem;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--neon-blue);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .hero-cta-secondary:hover {
+            background: rgba(0, 242, 254, 0.1);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .hero-image-container {
+            margin-top: 3rem;
+            position: relative;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-image {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 80px rgba(155, 81, 224, 0.3);
+            position: relative;
+        }
+
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(155, 81, 224, 0.1));
+            pointer-events: none;
+        }
+
+        .features {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--cosmic-purple));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(155, 81, 224, 0.2);
+            border-color: rgba(155, 81, 224, 0.3);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(155, 81, 224, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(0, 242, 254, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
+        }
+
+        .feature-icon i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-white);
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .demo-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(11, 11, 30, 0.9) 50%, transparent 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 500px;
+            background: radial-gradient(ellipse at center, rgba(155, 81, 224, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .demo-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .demo-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-content p {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+        }
+
+        .demo-showcase {
+            margin-top: 3rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .demo-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .demo-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .demo-item:hover {
+            background: rgba(0, 242, 254, 0.05);
+            transform: scale(1.03);
+        }
+
+        .demo-icon {
+            font-size: 2rem;
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        .demo-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-item p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        .price-section {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .price-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-section p {
+            color: var(--text-gray);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .price-card {
+            display: inline-block;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            max-width: 400px;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .price-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(155, 81, 224, 0.25);
+            border-color: rgba(155, 81, 224, 0.3);
+        }
+
+        .price-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-white);
+        }
+
+        .price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-blue), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .price-features li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .price-features li:last-child {
+            border-bottom: none;
+        }
+
+        .price-features li i {
+            color: var(--neon-blue);
+        }
+
+        .price-button {
+            background: linear-gradient(135deg, var(--cosmic-purple), var(--dark-purple));
+            color: var(--text-white);
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow);
+        }
+
+        .price-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(155, 81, 224, 0.5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--neon-blue), #00C3FF);
+            color: #0B0B1E;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.5);
+        }
+
+        .cta-button-secondary {
+            background: transparent;
+            color: var(--cosmic-purple);
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--cosmic-purple);
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .cta-button-secondary:hover {
+            background: rgba(155, 81, 224, 0.1);
+        }
+
+        .footer {
+            background: rgba(11, 11, 30, 0.98);
+            border-top: 1px solid var(--glass-border);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-white);
+        }
+
+        .footer-section p {
+            color: var(--text-gray);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--cosmic-purple);
+            border-color: var(--cosmic-purple);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-cta {
+                display: none;
+            }
+
+            .hero {
+                padding: 4rem 1.5rem 2rem;
+            }
+
+            .hero-cta-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-cta, .hero-cta-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-content h2 {
+                font-size: 2rem;
+            }
+
+            .demo-showcase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-card {
+                width: 100%;
+            }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-globe"></i>
+            CosmosVR
+        </div>
+        <ul class="nav-links">
+            <li><a href="#features">Recursos</a></li>
+            <li><a href="#demo">Experiência</a></li>
+            <li><a href="#pricing">Preços</a></li>
+        </ul>
+        <a href="#demo" class="nav-cta">Começar Agora</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-vr-cardboard"></i>
+                Otimizado para Pass-through e Rastreamento de Mão do Meta Quest 3
+            </div>
+            <h1>O Universo nas Suas Mãos</h1>
+            <p>Experimente o Sistema Solar em 3D espacialmente impressionante no Meta Quest 3. Caminhe entre planetas, escala galáxias e testemunhe eventos cósmicos.</p>
+            <div class="hero-cta-container">
+                <a href="#" class="hero-cta">
+                    <i class="fab fa-meta"></i>
+                    Baixar na Quest Store
+                </a>
+                <a href="#demo" class="hero-cta-secondary">
+                    <i class="fas fa-play"></i>
+                    Ver Demonstração
+                </a>
+            </div>
+            <div class="hero-image-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Solarsystemsz.png/800px-Solarsystemsz.png" alt="Sistema Solar" class="hero-image">
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <h3>Física Hiperrrealista</h3>
+                <p>Experimente órbitas planetárias e interações gravitacionais com surpreendente precisão. Veja como a gravidade forma nosso sistema solar em tempo real.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </div>
+                <h3>Modo Realidade Mista</h3>
+                <p>Veja nosso sistema solar flutuar na sua sala de estar usando a tecnologia passthrough do Quest 3. Navegue pelo espaço no seu ambiente real.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>Viagem Temporal Interativa</h3>
+                <p>Controle o tempo e assista aos alinhamentos planetários, eclipses e eventos cósmicos se desenrolarem ante os seus olhos. Avance séculos em segundos.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo-section">
+        <div class="demo-content">
+            <h2>Entre no Cosmos</h2>
+            <p>Da superfície ígnea do Sol aos anéis de Saturno, cada planeta conta uma história. Experimente o universo como nunca antes.</p>
+            <div class="demo-showcase">
+                <div class="demo-showcase-grid">
+                    <div class="demo-item">
+                        <div class="demo-icon">
+                            <i class="fas fa-saturn"></i>
+                        </div>
+                        <h4>Camine em Marte</h4>
+                        <p>Explore o terreno do Planeta Vermelho de perto</p>
+                    </div>
+                    <div class="demo-item">
+                        <div class="demo-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h4>Viagem Interestelar</h4>
+                        <p>Viaje entre planetas e sistemas estelares</p>
+                    </div>
+                    <div class="demo-item">
+                        <div class="demo-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>Eventos Cosmicos</h4>
+                        <p>Testemunhe buracos negros e supernovas</p>
+                    </div>
+                    <div class="demo-item">
+                        <div class="demo-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h4>Rastreamento de Mãos</h4>
+                        <p>Navegue usando seus movimentos naturais de mão</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="price-section">
+        <h2>Inicie Sua Jornada</h2>
+        <p>Comece a explorar o universo hoje. Todos os recursos incluídos em um único pacote poderoso.</p>
+        <div class="price-card">
+            <h3>CosmosVR Completo</h3>
+            <div class="price">$29.99</div>
+            <ul class="price-features">
+                <li><i class="fas fa-check"></i> Acesso Completo ao Sistema Solar</li>
+                <li><i class="fas fa-check"></i> Modo Realidade Mista</li>
+                <li><i class="fas fa-check"></i> Rastreamento de Mãos em 3D</li>
+                <li><i class="fas fa-check"></i> Viagem Temporal Interativa</li>
+                <li><i class="fas fa-check"></i> Atualizações Regulares</li>
+                <li><i class="fas fa-check"></i> Suporte 24/7</li>
+            </ul>
+            <a href="#" class="price-button">Obter Agora</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>CosmosVR</h3>
+                <p>Experimente o universo como nunca antes. Sua jornada através do espaço começa aqui.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-steam"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#features">Recursos</a></li>
+                    <li><a href="#demo">Experiência</a></li>
+                    <li><a href="#pricing">Preços</a></li>
+                    <li><a href="#">Suporte</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Comunidade</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Servidor Discord</a></li>
+                    <li><a href="#">Fóruns</a></li>
+                    <li><a href="#">API do Desenvolvedor</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p>suporte@cosmosvr.com</p>
+                <p> São Paulo, SP</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CosmosVR. Todos os direitos reservados. O universo aguarda.</p>
+        </div>
+    </footer>
+
+    <div class="stars" id="stars"></div>
+
+    <script>
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        window.addEventListener('load', createStars);
+
+        document.querySelector('.price-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Redirecionando para a Quest Store... 🚀');
+        });
+
+        document.querySelector('.hero-cta').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Redirecionando para a Quest Store... 🚀');
+        });
+
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(11, 11, 30, 0.95)';
+            } else {
+                nav.style.background = 'rgba(11, 11, 30, 0.85)';
+            }
+        });
+    </script>
+</body>
+</html>
